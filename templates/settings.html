@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings - AdFlow{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <h2 class="text-3xl font-bold tracking-tight">Settings</h2>
+        <p class="text-gray-500">Manage your account settings and preferences</p>
+    </div>
+
+    <div class="bg-white rounded-lg border shadow-sm">
+        <div class="p-6 border-b">
+            <div class="flex space-x-4">
+                <button class="px-3 py-2 text-sm font-medium rounded-md primary-bg text-white" data-tab="profile">
+                    Profile
+                </button>
+                <button class="px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100" data-tab="account">
+                    Account
+                </button>
+                <button class="px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100" data-tab="integrations">
+                    Integrations
+                </button>
+                <button class="px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100" data-tab="notifications">
+                    Notifications
+                </button>
+            </div>
+        </div>
+        
+        <div id="profile-tab" class="p-6">
+            <form method="POST" action="{{ url_for('settings') }}">
+                <input type="hidden" name="section" value="profile">
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label for="name" class="text-sm font-medium">Full Name</label>
+                        <input id="name" name="name" value="{{ current_user.name }}" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="email" class="text-sm font-medium">Email</label>
+                        <input id="email" type="email" value="{{ current_user.email }}" disabled
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="company" class="text-sm font-medium">Company</label>
+                        <input id="company" name="company" value="{{ current_user.company or '' }}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="role" class="text-sm font-medium">Role</label>
+                        <input id="role" name="role" value="{{ current_user.role or '' }}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <button type="submit" class="py-2 px-4 primary-bg text-white font-medium rounded-md hover:bg-blue-700">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="account-tab" class="p-6 hidden">
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg border">
+                    <h3 class="text-lg font-medium mb-4">Password</h3>
+                    <form method="POST" action="{{ url_for('settings') }}" class="space-y-4">
+                        <input type="hidden" name="section" value="password">
+                        <div class="space-y-2">
+                            <label for="current_password" class="text-sm font-medium">Current Password</label>
+                            <input id="current_password" name="current_password" type="password" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="new_password" class="text-sm font-medium">New Password</label>
+                            <input id="new_password" name="new_password" type="password" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="confirm_password" class="text-sm font-medium">Confirm New Password</label>
+                            <input id="confirm_password" name="confirm_password" type="password" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        </div>
+                        <button type="submit" class="py-2 px-4 primary-bg text-white font-medium rounded-md hover:bg-blue-700">
+                            Update Password
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border">
+                    <h3 class="text-lg font-medium mb-2">Delete Account</h3>
+                    <p class="text-sm text-gray-500 mb-4">
+                        Permanently delete your account and all of your data
+                    </p>
+                    <p class="text-sm text-gray-500 mb-4">
+                        Once you delete your account, there is no going back. Please be certain.
+                    </p>
+                    <button type="button" class="py-2 px-4 bg-red-600 text-white font-medium rounded-md hover:bg-red-700">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="integrations-tab" class="p-6 hidden">
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg border">
+                    <h3 class="text-lg font-medium mb-4">API Keys</h3>
+                    <form method="POST" action="{{ url_for('settings') }}" class="space-y-4">
+                        <input type="hidden" name="section" value="api_keys">
+                        <div class="space-y-2">
+                            <label for="meta_api_key" class="text-sm font-medium">Meta Marketing API Key</label>
+                            <input id="meta_api_key" name="meta_api_key" value="{{ meta_api_key }}"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <p class="text-xs text-gray-500">Used for publishing ads to Facebook and Instagram</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="openai_api_key" class="text-sm font-medium">OpenAI API Key</label>
+                            <input id="openai_api_key" name="openai_api_key" value="{{ openai_api_key }}"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <p class="text-xs text-gray-500">Used for generating ad content with AI</p>
+                        </div>
+                        <button type="submit" class="py-2 px-4 primary-bg text-white font-medium rounded-md hover:bg-blue-700">
+                            Save API Keys
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border">
+                    <h3 class="text-lg font-medium mb-4">Connected Accounts</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    f
+                                </div>
+                                <div>
+                                    <p class="font-medium">Facebook</p>
+                                    <p class="text-sm text-gray-500">Connected as {{ current_user.company or 'Your Business' }}</p>
+                                </div>
+                            </div>
+                            <button class="py-1 px-3 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50">
+                                Disconnect
+                            </button>
+                        </div>
+
+                        <hr>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-full flex items-center justify-center text-white font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Instagram</p>
+                                    <p class="text-sm text-gray-500">Connected as @{{ current_user.company|lower|replace(' ', '_') or 'your_business' }}</p>
+                                </div>
+                            </div>
+                            <button class="py-1 px-3 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50">
+                                Disconnect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="notifications-tab" class="p-6 hidden">
+            <div class="bg-white p-6 rounded-lg border">
+                <h3 class="text-lg font-medium mb-4">Notification Preferences</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">Email Notifications</p>
+                            <p class="text-sm text-gray-500">Receive email notifications about your campaigns</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+
+                    <hr>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">Campaign Status Updates</p>
+                            <p class="text-sm text-gray-500">Get notified when your campaign status changes</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+
+                    <hr>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">Performance Alerts</p>
+                            <p class="text-sm text-gray-500">Receive alerts when campaigns exceed performance thresholds</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+
+                    <hr>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">Marketing Tips & Updates</p>
+                            <p class="text-sm text-gray-500">Receive occasional tips and platform updates</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button type="button" class="py-2 px-4 primary-bg text-white font-medium rounded-md hover:bg-blue-700">
+                        Save Preferences
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching
+        const tabs = document.querySelectorAll('[data-tab]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Hide all tabs
+                document.querySelectorAll('[id$="-tab"]').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Show selected tab
+                document.getElementById(this.dataset.tab + '-tab').classList.remove('hidden');
+                
+                // Update active state
+                tabs.forEach(t => {
+                    t.classList.remove('primary-bg', 'text-white');
+                    t.classList.add('text-gray-700', 'hover:bg-gray-100');
+                });
+                this.classList.add('primary-bg', 'text-white');
+                this.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            });
+        });
+    });
+</script>
+{% endblock %}

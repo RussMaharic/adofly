@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-20 md:py-28">
+    <div class="container flex flex-col items-center text-center">
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight">
+            Create, Publish, and Analyze Ads <br>
+            <span class="primary-color">All in One Platform</span>
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg md:text-xl text-gray-600">
+            AdFlow helps you create compelling ads with AI, publish them directly to platforms, and track their
+            performance in real-time.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row gap-4">
+            <a href="{{ url_for('register') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white primary-bg hover:bg-blue-700">
+                Get Started
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </a>
+            <a href="#features" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-gray-100" id="features">
+    <div class="container">
+        <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm">
+                <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <span class="primary-color font-bold">1</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Create with AI</h3>
+                <p class="text-gray-600">
+                    Generate compelling ad copy and creative ideas using our AI-powered tools.
+                </p>
+            </div>
+            <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm">
+                <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <span class="primary-color font-bold">2</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Publish Seamlessly</h3>
+                <p class="text-gray-600">
+                    Push your ads directly to Meta platforms with just a few clicks.
+                </p>
+            </div>
+            <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm">
+                <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <span class="primary-color font-bold">3</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Analyze Performance</h3>
+                <p class="text-gray-600">
+                    Track metrics and optimize your campaigns with detailed analytics.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

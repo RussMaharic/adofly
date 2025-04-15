@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AdFlow - Ad Agency Workflow Platform{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom styles */
+        .primary-color {
+            color: #3b82f6;
+        }
+        .primary-bg {
+            background-color: #3b82f6;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    {% if current_user.is_authenticated %}
+        {% include 'includes/dashboard_header.html' %}
+        <div class="flex flex-1">
+            {% include 'includes/dashboard_sidebar.html' %}
+            <main class="flex-1 p-6 md:p-8 container max-w-7xl mx-auto">
+                {% include 'includes/flash_messages.html' %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    {% else %}
+        {% if request.path not in ['/login', '/register'] %}
+            {% include 'includes/header.html' %}
+        {% endif %}
+        <main class="flex-1">
+            {% include 'includes/flash_messages.html' %}
+            {% block content %}{% endblock %}
+        </main>
+        {% if request.path not in ['/login', '/register'] %}
+            {% include 'includes/footer.html' %}
+        {% endif %}
+    {% endif %}
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Ad - AdFlow{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <h2 class="text-3xl font-bold tracking-tight">Create New Ad</h2>
+        <p class="text-gray-500">Design your ad with AI assistance and publish it to Meta platforms</p>
+    </div>
+
+    <div class="bg-white rounded-lg border shadow-sm">
+        <div class="p-6">
+            <h3 class="text-lg font-medium">Ad Campaign Details</h3>
+            <p class="text-sm text-gray-500">Define your campaign objective and target audience</p>
+        </div>
+        <div class="p-6 pt-0 border-t">
+            <form method="POST" action="{{ url_for('create_ad') }}" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="name" class="text-sm font-medium">Campaign Name</label>
+                    <input id="name" name="name" placeholder="e.g., Summer Sale Promotion" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div class="space-y-2">
+                    <label for="platform" class="text-sm font-medium">Platform</label>
+                    <select id="platform" name="platform" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">Select platform</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="Both">Both Facebook & Instagram</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label for="objective" class="text-sm font-medium">Campaign Objective</label>
+                    <select id="objective" name="objective" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">Select objective</option>
+                        <option value="awareness">Brand Awareness</option>
+                        <option value="consideration">Consideration</option>
+                        <option value="conversion">Conversion</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label for="target_audience" class="text-sm font-medium">Target Audience</label>
+                    <input id="target_audience" name="target_audience" 
+                        placeholder="e.g., Small business owners, Fitness enthusiasts" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" name="generate" value="1" 
+                        class="py-2 px-4 primary-bg text-white font-medium rounded-md hover:bg-blue-700 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        Generate Ad Content with AI
+                    </button>
+                    <button type="submit" 
+                        class="py-2 px-4 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50">
+                        Create Manually
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics - AdFlow{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <h2 class="text-3xl font-bold tracking-tight">Analytics</h2>
+        <p class="text-gray-500">Detailed insights and performance metrics for your ad campaigns</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <select class="px-3 py-2 border border-gray-300 rounded-md w-[180px]">
+            <option value="7days">Last 7 days</option>
+            <option value="30days" selected>Last 30 days</option>
+            <option value="90days">Last 90 days</option>
+            <option value="year">Last year</option>
+        </select>
+    </div>
+
+    <div class="bg-white rounded-lg border shadow-sm">
+        <div class="p-6 border-b">
+            <div class="flex space-x-4">
+                <button class="px-3 py-2 text-sm font-medium rounded-md primary-bg text-white" data-tab="performance">
+                    Performance
+                </button>
+                <button class="px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100" data-tab="audience">
+                    Audience
+                </button>
+                <button class="px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100" data-tab="comparison">
+                    Campaign Comparison
+                </button>
+            </div>
+        </div>
+        
+        <div id="performance-tab" class="p-6 space-y-6">
+            <div class="mb-4">
+                <h3 class="text-lg font-medium">Performance Metrics</h3>
+                <p class="text-sm text-gray-500">Key metrics for your ad campaigns over time</p>
+            </div>
+            <div class="h-[400px]">
+                <canvas id="performanceChart"></canvas>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="text-sm font-medium text-gray-500">Impressions</h4>
+                    <div class="text-2xl font-bold">1.2M</div>
+                    <p class="text-xs text-gray-500">+12% from previous period</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="text-sm font-medium text-gray-500">Click-through Rate</h4>
+                    <div class="text-2xl font-bold">3.2%</div>
+                    <p class="text-xs text-gray-500">+0.8% from previous period</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="text-sm font-medium text-gray-500">Conversion Rate</h4>
+                    <div class="text-2xl font-bold">2.1%</div>
+                    <p class="text-xs text-gray-500">+0.3% from previous period</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="text-sm font-medium text-gray-500">Cost per Conversion</h4>
+                    <div class="text-2xl font-bold">$12.45</div>
+                    <p class="text-xs text-gray-500">-$1.20 from previous period</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="audience-tab" class="p-6 space-y-6 hidden">
+            <div class="mb-4">
+                <h3 class="text-lg font-medium">Audience Insights</h3>
+                <p class="text-sm text-gray-500">Demographic and behavioral data about your audience</p>
+            </div>
+            <div class="h-[400px]">
+                <canvas id="audienceChart"></canvas>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+                <div class="bg-white p-6 rounded-lg border">
+                    <h4 class="text-lg font-medium mb-4">Age Distribution</h4>
+                    <div class="space-y-4">
+                        {% for age, percentage in [('18-24', 15), ('25-34', 32), ('35-44', 28), ('45-54', 18), ('55+', 7)] %}
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">{{ age }}</span>
+                                <span class="text-sm text-gray-500">{{ percentage }}%</span>
+                            </div>
+                            <div class="h-2 w-full rounded-full bg-gray-200">
+                                <div class="h-2 rounded-full primary-bg" style="width: {{ percentage }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border">
+                    <h4 class="text-lg font-medium mb-4">Geographic Distribution</h4>
+                    <div class="space-y-4">
+                        {% for location, percentage in [('United States', 42), ('United Kingdom', 18), ('Canada', 15), ('Australia', 12), ('Germany', 8), ('Other', 5)] %}
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">{{ location }}</span>
+                                <span class="text-sm text-gray-500">{{ percentage }}%</span>
+                            </div>
+                            <div class="h-2 w-full rounded-full bg-gray-200">
+                                <div class="h-2 rounded-full primary-bg" style="width: {{ percentage }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="comparison-tab" class="p-6 hidden">
+            <div class="mb-4">
+                <h3 class="text-lg font-medium">Campaign Comparison</h3>
+                <p class="text-sm text-gray-500">Compare performance across different campaigns</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500 border-b">
+                        <tr>
+                            <th class="px-6 py-3 text-left">Campaign</th>
+                            <th class="px-6 py-3 text-left">Platform</th>
+                            <th class="px-6 py-3 text-left">Impressions</th>
+                            <th class="px-6 py-3 text-left">Clicks</th>
+                            <th class="px-6 py-3 text-left">CTR</th>
+                            <th class="px-6 py-3 text-left">Conversions</th>
+                            <th class="px-6 py-3 text-left">Conv. Rate</th>
+                            <th class="px-6 py-3 text-left">CPC</th>
+                            <th class="px-6 py-3 text-left">Spend</th>
+                            <th class="px-6 py-3 text-left">ROI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        {% for i in range(1, 6) %}
+                        <tr>
+                            <td class="px-6 py-4 font-medium">Campaign {{ i }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 text-xs rounded-full border">
+                                    {{ 'Facebook' if i % 2 == 0 else 'Instagram' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">{{ '{:,}'.format(12500 - i * 1000) }}</td>
+                            <td class="px-6 py-4">{{ '{:,}'.format(450 - i * 30) }}</td>
+                            <td class="px-6 py-4">{{ '{:.1f}%'.format(3.6 - i * 0.1) }}</td>
+                            <td class="px-6 py-4">{{ 85 - i * 5 }}</td>
+                            <td class="px-6 py-4">{{ '{:.1f}%'.format(18.9 - i * 0.3) }}</td>
+                            <td class="px-6 py-4">${{ '{:.2f}'.format(0.71 + i * 0.02) }}</td>
+                            <td class="px-6 py-4">${{ '{:.2f}'.format(320.50 - i * 20) }}</td>
+                            <td class="px-6 py-4 font-medium text-green-600">{{ '{:.0f}%'.format(215 - i * 10) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching
+        const tabs = document.querySelectorAll('[data-tab]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Hide all tabs
+                document.querySelectorAll('[id$="-tab"]').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Show selected tab
+                document.getElementById(this.dataset.tab + '-tab').classList.remove('hidden');
+                
+                // Update active state
+                tabs.forEach(t => {
+                    t.classList.remove('primary-bg', 'text-white');
+                    t.classList.add('text-gray-700', 'hover:bg-gray-100');
+                });
+                this.classList.add('primary-bg', 'text-white');
+                this.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            });
+        });
+        
+        // Performance chart
+        const performanceData = {{ performance_data|safe }};
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        
+        new Chart(performanceCtx, {
+            type: 'line',
+            data: {
+                labels: performanceData.map(item => item.date),
+                datasets: [
+                    {
+                        label: 'Impressions',
+                        data: performanceData.map(item => item.impressions),
+                        borderColor: '#8884d8',
+                        backgroundColor: 'rgba(136, 132, 216, 0.1)',
+                        tension: 0.4,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Clicks',
+                        data: performanceData.map(item => item.clicks),
+                        borderColor: '#82ca9d',
+                        backgroundColor: 'rgba(130, 202, 157, 0.1)',
+                        tension: 0.4,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Conversions',
+                        data: performanceData.map(item => item.conversions),
+                        borderColor: '#ffc658',
+                        backgroundColor: 'rgba(255, 198, 88, 0.1)',
+                        tension: 0.4,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'CPC',
+                        data: performanceData.map(item => item.cpc),
+                        borderColor: '#ff8042',
+                        backgroundColor: 'rgba(255, 128, 66, 0.1)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        position: 'left'
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Audience chart
+        const audienceData = {{ audience_data|safe }};
+        const audienceCtx = document.getElementById('audienceChart').getContext('2d');
+        
+        new Chart(audienceCtx, {
+            type: 'bar',
+            data: {
+                labels: audienceData.map(item => item.age),
+                datasets: [
+                    {
+                        label: 'Male',
+                        data: audienceData.map(item => item.male),
+                        backgroundColor: '#8884d8'
+                    },
+                    {
+                        label: 'Female',
+                        data: audienceData.map(item => item.female),
+                        backgroundColor: '#82ca9d'
+                    },
+                    {
+                        label: 'Other',
+                        data: audienceData.map(item => item.other),
+                        backgroundColor: '#ffc658'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
